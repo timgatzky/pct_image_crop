@@ -1,0 +1,1 @@
+Cropperjs Script by: https://fengyuanchen.github.io/cropperjs/

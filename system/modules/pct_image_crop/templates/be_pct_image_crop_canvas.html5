@@ -1,0 +1,49 @@
+
+<?php // load scripts and styles
+$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/pct_image_crop/assets/js/cropperjs/cropper.min.js';
+$GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/js/cropperjs/cropper.css';
+$GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/css/styles.css';
+?>
+
+<div id="pct_image_crop_canvas_<?php echo $this->id; ?>" class="pct_image_crop_widget">
+	<div class="canvas"><?php echo $this->image; ?></div>
+	
+	<div class="information">
+		<div class="text long"><?= $this->value; ?></div>
+	</div>
+	<input type="hidden" readonly class="long" name="<?= $this->name; ?>" value="<?= $this->value; ?>">
+	<input type="hidden" readonly class="long" name="<?= $this->name_base64; ?>" value="">
+</div>
+
+<script type='text/javascript'>
+/* <![CDATA[ */
+
+window.addEvent('domready', function()
+{
+	var image = document.querySelector('#pct_image_crop_canvas_<?php echo $this->id; ?> img');
+	var cropper = new Cropper(image,
+	{
+		movable: false,
+		zoomable: false,
+		rotatable: false,
+		scalable: false,
+		viewMode: 2,
+		<?php if($this->data): ?>
+		data: JSON.parse('<?= $this->data; ?>'),
+		<?php endif; ?>
+		crop: function (e) 
+    	{
+	      	var data = JSON.stringify( cropper.getData() );
+			// update readable
+			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> .information .text').innerHTML = data;
+			// update input
+			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> input[name="<?= $this->name; ?>"]').value = data;
+			
+			var cropped_image_data = cropper.getCroppedCanvas().toDataURL('<?= $this->mime; ?>');
+			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> input[name="<?= $this->name_base64; ?>"]').value = cropped_image_data;
+    	}
+    });
+});
+
+/* ]]> */
+</script>
