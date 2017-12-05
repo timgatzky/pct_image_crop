@@ -19,19 +19,11 @@ $GLOBALS['PCT_IMAGE_CROP']['supportedCeTypes'] = array('image');
 
 if(!is_array($GLOBALS['PCT_IMAGE_CROP']['cropFormats']))
 {
-	$GLOBALS['PCT_IMAGE_CROP']['cropFormats'] = array('free','16_9','4_3','1_1');
+	$GLOBALS['PCT_IMAGE_CROP']['cropFormats'] = array('pct_free','pct_16_9','pct_4_3','pct_1_1');
 }
 
-// insert a free format selection
-if(!is_array($GLOBALS['TL_CROP']['pct_image_crop']))
-{	
-	array_insert( $GLOBALS['TL_CROP'],0, array('pct_image_crop' => $GLOBALS['PCT_IMAGE_CROP']['cropFormats']));
-}
-else
-{
-	$GLOBALS['TL_CROP']['pct_image_crop'][] = $GLOBALS['PCT_IMAGE_CROP']['cropFormats'];
-}
-
+// insert a imace crop selections
+array_insert( $GLOBALS['TL_CROP'],0, array('pct_image_crop' => $GLOBALS['PCT_IMAGE_CROP']['cropFormats']));
 
 /**
  * Hooks

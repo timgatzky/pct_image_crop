@@ -108,8 +108,12 @@ class TableContent extends \Backend
 		$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
 		
 		$arrSize = deserialize($objDC->activeRecord->{$arrFieldDef['eval']['sizeField']});
+		if(!is_array($arrSize))
+		{
+			$arrSize = array('','','pct_free');
+		}
 		
-		$strRatio = $arrSize[2];
+		$strRatio = str_replace('pct_','',$arrSize[2]);
 		$numRatio = 0;
 		if($strRatio != 'free')
 		{
