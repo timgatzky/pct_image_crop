@@ -109,10 +109,11 @@ class TableContent extends \Backend
 		}
 		
 		$strField = $objDC->field;
-		$strTarget = 'singleSRC';
 		$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
-		
-		$arrSize = deserialize($objDC->activeRecord->{$arrFieldDef['eval']['sizeField']});
+		$strSourceField = $arrFieldDef['eval']['cropper']['sourceField'];
+	 	$strSizeField = $arrFieldDef['eval']['cropper']['sizeField'];
+
+		$arrSize = deserialize($objDC->activeRecord->{$strSizeField});
 		if(!is_array($arrSize))
 		{
 			$arrSize = array('','','pct_free');
@@ -126,7 +127,7 @@ class TableContent extends \Backend
 			$numRatio = $_ratio[0] / $_ratio[1];
 		}
 		
-		$objFileModel = \FilesModel::findByPk($objDC->activeRecord->{$strTarget});
+		$objFileModel = \FilesModel::findByPk($objDC->activeRecord->{$strSourceField});
 		$objFile = new \File($objFileModel->path);
 		$strImageSrc = \Image::get($objFileModel->path,$arrSize[0],$arrSize[1],$arrSize[2]);
 		$strImage = \Image::getHtml($strImageSrc);
