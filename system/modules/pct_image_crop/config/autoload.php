@@ -18,6 +18,7 @@ ClassLoader::addClasses(array
 (
 	'PCT\ImageCrop\Core' 					=> 'system/modules/pct_image_crop/PCT/ImageCrop/Core.php',
 	'PCT\ImageCrop\Backend\TableContent' 	=> 'system/modules/pct_image_crop/PCT/ImageCrop/Backend/TableContent.php',
+	'PCT\ImageCrop\Backend\Helper' 			=> 'system/modules/pct_image_crop/PCT/ImageCrop/Backend/Helper.php',
 ));
 
 /**
@@ -25,5 +26,6 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'be_pct_image_crop_canvas' 	=> 'system/modules/pct_image_crop/templates',
+	'be_pct_image_crop_canvas' 		=> 'system/modules/pct_image_crop/templates',
+	'be_js_pct_image_crop_backend' 	=> 'system/modules/pct_image_crop/templates',
 ));

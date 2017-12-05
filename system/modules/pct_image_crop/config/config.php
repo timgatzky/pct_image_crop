@@ -28,4 +28,5 @@ array_insert( $GLOBALS['TL_CROP'],0, array('pct_image_crop' => $GLOBALS['PCT_IMA
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['getContentElement'][] = array('PCT\ImageCrop\Core','getContentElementCallback');
+$GLOBALS['TL_HOOKS']['getContentElement'][] 		= array('PCT\ImageCrop\Core','getContentElementCallback');
+$GLOBALS['TL_HOOKS']['parseWidget'][] 		= array('PCT\ImageCrop\Backend\Helper','parseWidgetCallback');

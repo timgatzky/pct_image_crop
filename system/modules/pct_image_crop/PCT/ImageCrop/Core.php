@@ -22,6 +22,14 @@ namespace PCT\ImageCrop;
  */ 
 class Core extends \Controller
 { 
+ 	/**
+ 	 * Update the image source by the cropped image and regenerate the element
+ 	 * @param object
+ 	 * @param string
+ 	 * @param object
+ 	 *
+ 	 * called from getContentElement Hook
+ 	 */
  	public function getContentElementCallback($objRow,$strBuffer,$objElement)
  	{
 	 	if( !in_array($objRow->type,$GLOBALS['PCT_IMAGE_CROP']['supportedCeTypes']) )

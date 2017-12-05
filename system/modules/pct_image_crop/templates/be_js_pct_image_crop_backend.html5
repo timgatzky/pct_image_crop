@@ -1,0 +1,18 @@
+<script type="text/javascript">
+/* <![CDATA[ */
+/**
+ * Add autosubmit to imageSize widgets and disable unput text fields for image cropper selections
+ */
+window.addEvent('domready', function() 
+{
+	var widget = $('ctrl_<?= $this->widget->name; ?>').getChildren('select').addEvent('change',function()
+	{
+		Backend.autoSubmit('<?= $this->table; ?>');
+	});
+	
+	<?php if($this->isCropper): ?>
+	$('ctrl_<?= $this->widget->name; ?>').getChildren('input[type="text"]').set('readonly','readonly');
+	<?php endif; ?>
+});
+/* ]]> */
+</script>

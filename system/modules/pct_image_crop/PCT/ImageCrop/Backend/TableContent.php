@@ -33,11 +33,19 @@ class TableContent extends \Backend
 		 	$objDC->activeRecord = \ContentModel::findByPk($objDC->id);
 	 	}
 		
-	 	// add submit on change
-	 	$GLOBALS['TL_DCA'][$objDC->table]['fields']['size']['eval']['submitOnChange'] = true;
+		// load the data container
+		if(!$GLOBALS['loadDataContainer'][$objDC->table])
+		{
+			\Controller::loadDataContainer($objDC->table);
+		}
+		
+		$strField = 'pct_image_crop_data';
+	 	$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
+		$strfield_base64 = 'pct_image_crop_data_base64';
+	 	$strTarget = $arrFieldDef['eval']['sizeField'];
 	 	
-	 	$arrSize = deserialize($objDC->activeRecord->size);
-	 	
+		$arrSize = deserialize($objDC->activeRecord->{$strTarget});
+		
 	 	if(!is_array($arrSize))
 	 	{
 		 	return;
@@ -47,12 +55,8 @@ class TableContent extends \Backend
 	 	{
 		 	return;
 	 	}
-	 	
-	 	$strField = 'pct_image_crop_data';
-	 	$strfield_base64 = 'pct_image_crop_data_base64';
-	 	$strTarget = 'singleSRC';
-	 	
-	 	unset($GLOBALS['TL_DCA'][$objDC->table]['fields']['size']['eval']['rgxp']);
+	 		 	
+	 	unset($GLOBALS['TL_DCA'][$objDC->table]['fields'][$strTarget]['eval']['rgxp']);
 	 	
 	 	// load the image crop palette
 	 	$GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type] = str_replace('singleSRC', 'singleSRC;{pct_image_crop_legend},'.$strField.';', $GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type]);
