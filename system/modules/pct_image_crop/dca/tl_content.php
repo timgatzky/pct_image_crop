@@ -24,7 +24,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['pct_image_crop_data'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['pct_image_crop_data'],
 	'exclude'                 => true,
 	'inputType'               => 'text',
-	'eval'                    => array('tl_class'=>'clr','sizeField'=>'size'),
+	'eval'                    => array('tl_class'=>'clr','cropper' => array('sizeField'=>'size','sourceField'=>'singleSRC') ),
 	'input_field_callback'	  => array('PCT\ImageCrop\Backend\TableContent','renderImageCropCanvas'),
 	'sql'					  => "tinytext NULL",
 );

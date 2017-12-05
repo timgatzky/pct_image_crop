@@ -42,11 +42,11 @@ class TableContent extends \Backend
 		$strField = 'pct_image_crop_data';
 	 	$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
 		$strfield_base64 = 'pct_image_crop_data_base64';
-	 	$strTarget = $arrFieldDef['eval']['sizeField'];
+	 	$strSourceField = $arrFieldDef['eval']['cropper']['sourceField'];
+	 	$strSizeField = $arrFieldDef['eval']['cropper']['sizeField'];
 	 	
-		$arrSize = deserialize($objDC->activeRecord->{$strTarget});
-		
-	 	if(!is_array($arrSize))
+	 	$arrSize = deserialize($objDC->activeRecord->{$strSizeField});
+		if(!is_array($arrSize))
 	 	{
 		 	return;
 	 	}
@@ -56,18 +56,18 @@ class TableContent extends \Backend
 		 	return;
 	 	}
 	 		 	
-	 	unset($GLOBALS['TL_DCA'][$objDC->table]['fields'][$strTarget]['eval']['rgxp']);
+	 	unset($GLOBALS['TL_DCA'][$objDC->table]['fields'][$strSizeField]['eval']['rgxp']);
 	 	
 	 	// load the image crop palette
-	 	$GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type] = str_replace('singleSRC', 'singleSRC;{pct_image_crop_legend},'.$strField.';', $GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type]);
+	 	$GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type] = str_replace($strSourceField, 'singleSRC;{pct_image_crop_legend},'.$strField.';', $GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type]);
 	
 	 	// save value
 	 	if(\Input::post($strField) != '' && \Input::post($strfield_base64) != '')
 	 	{
 		 	$arrData = json_decode(\Input::post($strField),true);
 		 	$arrData_base64 = explode(',', \Input::post($strfield_base64));
-						 	
-		 	$objFile = \FilesModel::findByPk( $objDC->activeRecord->{$strTarget} );
+		 	
+		 	$objFile = \FilesModel::findByPk( $objDC->activeRecord->{$strSourceField} );
 		 	if($objFile !== null)
 		 	{
 		 	 	// process image to get a cached string path
@@ -79,6 +79,7 @@ class TableContent extends \Backend
 				 	$objFile->write( base64_decode($arrData_base64[1]) );
 				 	$objFile->close();
 			 	}
+			 	
 			 	// add new image path to the set data
 			 	$arrData['src'] = $strImage;
 		 	}

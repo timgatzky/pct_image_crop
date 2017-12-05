@@ -37,17 +37,28 @@ class Core extends \Controller
 		 	return $strBuffer;
 	 	}
 	 	
+	 	// load the data container
+		if(!$GLOBALS['loadDataContainer']['tl_content'])
+		{
+			\Controller::loadDataContainer('tl_content');
+		}
+	 	
 	 	if($objElement->type == 'alias' && $objElement->cteAlias)
 	 	{
 		 	$intId = $objElement->cteAlias;
 	 	}
 	 	
-	 	$arrSize = deserialize($objRow->size);
-	 	$objData = json_decode($objRow->pct_image_crop_data);
+	 	$strField = 'pct_image_crop_data';
+	 	$arrFieldDef = $GLOBALS['TL_DCA']['tl_content']['fields'][$strField];
+		$strSourceField = $arrFieldDef['eval']['cropper']['sourceField'];
+	 	$strSizeField = $arrFieldDef['eval']['cropper']['sizeField'];
+	 	
+	 	$arrSize = deserialize($objRow->{$strSizeField});
+	 	$objData = json_decode($objRow->{$strField});
 	 
-	 	if($arrSize[2] != 'pct_image_crop' || strlen($objData->src) < 1)
+	 	if(!in_array($arrSize[2], $GLOBALS['PCT_IMAGE_CROP']['cropFormats']))
 	 	{
-		 	return $strBuffer;
+		 	return;
 	 	}
 	 	
 	 	if(!file_exists(TL_ROOT.'/'.$objData->src))
@@ -69,7 +80,7 @@ class Core extends \Controller
 	 	// add the file to file database
 	 	$objFile = \Dbafs::addResource($objData->src);
 	 	// update the element source to the file
-	 	$objElement->singleSRC = $objFile->uuid;
+	 	$objElement->{$strSourceField} = $objFile->uuid;
 	 	// regenerate the element with the new data
 	 	$strBuffer = $objElement->generate();
 	 	
