@@ -13,9 +13,11 @@
  * permanent text corrections which are update-safe. 
  */
 
-
-$GLOBALS['TL_LANG']['MSC']['free'] = 'Free formats';
 $GLOBALS['TL_LANG']['MSC']['pct_image_crop'] = 'PCT Image Crop';
+$GLOBALS['TL_LANG']['MSC']['free'] = 'Frei';
+$GLOBALS['TL_LANG']['MSC']['16_9'] = '16:9';
+$GLOBALS['TL_LANG']['MSC']['4_3'] = '4:3';
+$GLOBALS['TL_LANG']['MSC']['1_1'] = '1:1';
 
 // ratios
 $GLOBALS['TL_LANG']['PCT_IMAGE_CROP']['buttons']['free'] 	= 'Free';

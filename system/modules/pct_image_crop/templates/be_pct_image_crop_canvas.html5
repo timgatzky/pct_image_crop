@@ -8,15 +8,6 @@ $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/css/styles.css';
 <div id="pct_image_crop_canvas_<?php echo $this->id; ?>" class="pct_image_crop_widget">
 	<div class="canvas"><?php echo $this->image; ?></div>
 	
-	<div class="operations">
-		<ul class="ratios">
-			<li class="free button" data-ratio="free"><?= $this->lang['buttons']['free']; ?></li>
-			<li class="16_9 button" data-ratio="16_9"><?= $this->lang['buttons']['16_9']; ?></li>
-			<li class="4_3 button" data-ratio="4_3"><?= $this->lang['buttons']['4_3']; ?></li>
-			<li class="1_1 button" data-ratio="1_1"><?= $this->lang['buttons']['1_1']; ?></li>
-		</ul>
-	</div>
-	
 	<div class="information">
 		<div class="text long"><?= $this->value; ?></div>
 	</div>
@@ -40,6 +31,9 @@ window.addEvent('domready', function()
 		<?php if($this->data): ?>
 		data: JSON.parse('<?= $this->data; ?>'),
 		<?php endif; ?>
+		<?php if($this->ratio): ?>
+		aspectRatio: <?= $this->ratio; ?>,
+		<?php endif; ?>
 		crop: function (e) 
     	{
 	      	var data = JSON.stringify( cropper.getData() );
@@ -60,9 +54,15 @@ window.addEvent('domready', function()
     $$('#pct_image_crop_canvas_<?php echo $this->id; ?> .operations .button').addEvent('click',function(e) 
     {
 	    var a = this.get('data-ratio').split('_');
+	    if(a.length < 2)
+	    {
+		    
+	    }
+	    
 	    if(a.length > 1)
 		{
-			options.aspectRatio = (a[0] / a[1]);
+				
+			console.log(a);
 			// destroy cropper instance and recreate it
 			cropper.destroy();
 			cropper = new Cropper(image, options);

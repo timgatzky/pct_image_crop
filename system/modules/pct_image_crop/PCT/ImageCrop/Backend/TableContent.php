@@ -43,7 +43,7 @@ class TableContent extends \Backend
 		 	return;
 	 	}
 	 	
-	 	if(!in_array('pct_image_crop', $arrSize) || $arrSize[2] != 'pct_image_crop')
+	 	if(!in_array($arrSize[2], $GLOBALS['PCT_IMAGE_CROP']['cropFormats']))
 	 	{
 		 	return;
 	 	}
@@ -103,16 +103,19 @@ class TableContent extends \Backend
 			\Controller::loadDataContainer($objDC->table);
 		}
 		
-		$arrSize = $GLOBALS['PCT_IMAGE_CROP']['defaultCanvasSize'] ?: array(600);
-		
-		if(count($arrSize) < 2)
-		{
-			$arrSize[2] = 'proportional';
-		}
-		
 		$strField = $objDC->field;
 		$strTarget = 'singleSRC';
 		$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
+		
+		$arrSize = deserialize($objDC->activeRecord->{$arrFieldDef['eval']['sizeField']});
+		
+		$strRatio = $arrSize[2];
+		$numRatio = 0;
+		if($strRatio != 'free')
+		{
+			$_ratio = explode('_', $strRatio);
+			$numRatio = $_ratio[0] / $_ratio[1];
+		}
 		
 		$objFileModel = \FilesModel::findByPk($objDC->activeRecord->{$strTarget});
 		$objFile = new \File($objFileModel->path);
@@ -122,6 +125,7 @@ class TableContent extends \Backend
 		$objTemplate = new \BackendTemplate('be_pct_image_crop_canvas');
 		$objTemplate->setData($objDC->activeRecord->row());
 		$objTemplate->objDataContainer = $objDC;
+		$objTemplate->activeRecord = $objDC->activeRecord;
 		$objTemplate->name = $strField;
 		$objTemplate->name_base64 = $strField.'_base64';
 		$objTemplate->image = $strImage;
@@ -130,6 +134,7 @@ class TableContent extends \Backend
 		$objTemplate->data = $objDC->activeRecord->{$strField} ?: '';
 		$objTemplate->fieldDef = $arrFieldDef;
 		$objTemplate->lang = $GLOBALS['TL_LANG']['PCT_IMAGE_CROP'];
+		$objTemplate->ratio = $numRatio;
 		
 		return  \Controller::replaceInsertTags($objTemplate->parse());
 	}
