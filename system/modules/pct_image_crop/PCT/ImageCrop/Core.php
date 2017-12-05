@@ -90,4 +90,76 @@ class Core extends \Controller
 	 		 	
 	 	return $strBuffer;
  	}
+ 	
+ 	
+	/**
+	 * Render the image crop field
+	 * @param object
+	 *
+	 * called input_field_callback
+	 */	
+	public function renderImageCropCanvas($objDC)
+	{
+		if(!$objDC->activeRecord->singleSRC)
+		{
+			return 'No image selected';
+		}
+		
+		// load the data container
+		if(!$GLOBALS['loadDataContainer'][$objDC->table])
+		{
+			\Controller::loadDataContainer($objDC->table);
+		}
+		
+		$strField = $objDC->field;
+		$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
+		$strSourceField = $arrFieldDef['eval']['cropper']['sourceField'];
+	 	$strSizeField = $arrFieldDef['eval']['cropper']['sizeField'];
+
+		$arrSize = deserialize($objDC->activeRecord->{$strSizeField});
+		if(!is_array($arrSize))
+		{
+			$arrSize = array('','','pct_free');
+		}
+		
+		$strRatio = str_replace('pct_','',$arrSize[2]);
+		$numRatio = 0;
+		if($strRatio != 'free')
+		{
+			$_ratio = explode('_', $strRatio);
+			$numRatio = $_ratio[0] / $_ratio[1];
+		}
+		
+		$objFileModel = \FilesModel::findByPk($objDC->activeRecord->{$strSourceField});
+		$objFile = new \File($objFileModel->path);
+		$strImageSrc = \Image::get($objFileModel->path,null,null);
+		$strImage = \Image::getHtml($strImageSrc);
+		
+		$objTemplate = new \BackendTemplate('be_pct_image_crop_canvas');
+		$objTemplate->setData($objDC->activeRecord->row());
+		$objTemplate->objDataContainer = $objDC;
+		$objTemplate->activeRecord = $objDC->activeRecord;
+		$objTemplate->file = $objFile;
+		$objTemplate->name = $strField;
+		$objTemplate->name_base64 = $strField.'_base64';
+		$objTemplate->image = $strImage;
+		$objTemplate->mime = $objFile->__get('mime');
+		$objTemplate->rounded_data = json_encode($objData);
+		$objTemplate->data = $objDC->activeRecord->{$strField} ?: '';
+		$objTemplate->fieldDef = $arrFieldDef;
+		$objTemplate->lang = $GLOBALS['TL_LANG']['PCT_IMAGE_CROP'];
+		$objTemplate->ratio = $numRatio;
+		
+		$offset = 10;
+		$arrStyles = array
+		(
+			 'max-height:'.($objFile->viewHeight + $offset) . 'px;',
+			 'max-width:'.($objFile->viewWidth + $offset) . 'px;'
+		);
+		
+		$objTemplate->styles = $arrStyles;
+		$objTemplate->canvas_styles = implode(' ', $arrStyles);
+		
+		return  \Controller::replaceInsertTags($objTemplate->parse());
+	}
 }

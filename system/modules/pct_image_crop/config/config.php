@@ -14,7 +14,6 @@
 /**
  * Config
  */
-$GLOBALS['PCT_IMAGE_CROP']['defaultCanvasSize'] = array(740);
 $GLOBALS['PCT_IMAGE_CROP']['supportedCeTypes'] = array('image');
 
 if(!is_array($GLOBALS['PCT_IMAGE_CROP']['cropFormats']))

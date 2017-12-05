@@ -21,6 +21,17 @@ $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/css/styles.css';
 window.addEvent('domready', function()
 {
 	var image = document.querySelector('#pct_image_crop_canvas_<?php echo $this->id; ?> img');
+	
+	// calculate max-height for canvas
+	var image_ratio = image.height / image.width;
+	if(image.height > image.width)
+	{
+		image_ratio = image.width / image.height;
+	}
+	var maxHeight = (image.width * image_ratio) + 50;
+	// set max-height
+	document.querySelector('#pct_image_crop_canvas_<?php echo $this->id; ?> .canvas').style = 'max-height:'+maxHeight+'px;';
+	
 	var options = 
 	{
 		movable: false,
@@ -49,25 +60,6 @@ window.addEvent('domready', function()
 	
 	// create instance
 	var cropper = new Cropper(image,options);
-    
-    // ratio buttons
-    $$('#pct_image_crop_canvas_<?php echo $this->id; ?> .operations .button').addEvent('click',function(e) 
-    {
-	    var a = this.get('data-ratio').split('_');
-	    if(a.length < 2)
-	    {
-		    
-	    }
-	    
-	    if(a.length > 1)
-		{
-				
-			console.log(a);
-			// destroy cropper instance and recreate it
-			cropper.destroy();
-			cropper = new Cropper(image, options);
-		}
-	});
 });
 
 /* ]]> */
