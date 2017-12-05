@@ -16,3 +16,9 @@
 
 $GLOBALS['TL_LANG']['MSC']['free'] = 'Free formats';
 $GLOBALS['TL_LANG']['MSC']['pct_image_crop'] = 'PCT Image Crop';
+
+// ratios
+$GLOBALS['TL_LANG']['PCT_IMAGE_CROP']['buttons']['free'] 	= 'Free';
+$GLOBALS['TL_LANG']['PCT_IMAGE_CROP']['buttons']['16_9'] 	= '16:9';
+$GLOBALS['TL_LANG']['PCT_IMAGE_CROP']['buttons']['4_3']	 	= '4:3';
+$GLOBALS['TL_LANG']['PCT_IMAGE_CROP']['buttons']['1_1']	 	= '1:1';

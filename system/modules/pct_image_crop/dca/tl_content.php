@@ -27,8 +27,4 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['pct_image_crop_data'] = array
 	'eval'                    => array('tl_class'=>'clr'),
 	'input_field_callback'	  => array('PCT\ImageCrop\Backend\TableContent','renderImageCropCanvas'),
 	'sql'					  => "tinytext NULL",
-	'cropperjs'				  => array
-	(
-		'ratios' => array('free','16:9','4:3')
-	),
 );

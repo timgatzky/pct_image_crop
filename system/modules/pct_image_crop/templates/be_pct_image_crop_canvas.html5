@@ -8,6 +8,15 @@ $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/css/styles.css';
 <div id="pct_image_crop_canvas_<?php echo $this->id; ?>" class="pct_image_crop_widget">
 	<div class="canvas"><?php echo $this->image; ?></div>
 	
+	<div class="operations">
+		<ul class="ratios">
+			<li class="free button" data-ratio="free"><?= $this->lang['buttons']['free']; ?></li>
+			<li class="16_9 button" data-ratio="16_9"><?= $this->lang['buttons']['16_9']; ?></li>
+			<li class="4_3 button" data-ratio="4_3"><?= $this->lang['buttons']['4_3']; ?></li>
+			<li class="1_1 button" data-ratio="1_1"><?= $this->lang['buttons']['1_1']; ?></li>
+		</ul>
+	</div>
+	
 	<div class="information">
 		<div class="text long"><?= $this->value; ?></div>
 	</div>
@@ -21,7 +30,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/css/styles.css';
 window.addEvent('domready', function()
 {
 	var image = document.querySelector('#pct_image_crop_canvas_<?php echo $this->id; ?> img');
-	var cropper = new Cropper(image,
+	var options = 
 	{
 		movable: false,
 		zoomable: false,
@@ -38,11 +47,27 @@ window.addEvent('domready', function()
 			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> .information .text').innerHTML = data;
 			// update input
 			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> input[name="<?= $this->name; ?>"]').value = data;
-			
+			// get base64 data
 			var cropped_image_data = cropper.getCroppedCanvas().toDataURL('<?= $this->mime; ?>');
 			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> input[name="<?= $this->name_base64; ?>"]').value = cropped_image_data;
     	}
-    });
+	};
+	
+	// create instance
+	var cropper = new Cropper(image,options);
+    
+    // ratio buttons
+    $$('#pct_image_crop_canvas_<?php echo $this->id; ?> .operations .button').addEvent('click',function(e) 
+    {
+	    var a = this.get('data-ratio').split('_');
+	    if(a.length > 1)
+		{
+			options.aspectRatio = (a[0] / a[1]);
+			// destroy cropper instance and recreate it
+			cropper.destroy();
+			cropper = new Cropper(image, options);
+		}
+	});
 });
 
 /* ]]> */

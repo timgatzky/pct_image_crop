@@ -79,8 +79,7 @@ class TableContent extends \Backend
 			 	$arrData['src'] = $strImage;
 		 	}
 			
-		 	$arrSet = array($strField => json_encode( array_filter($arrData) ));
-		 	\Database::getInstance()->prepare("UPDATE ".$objDC->table." %s WHERE id=?")->set($arrSet)->execute($objDC->id);
+		 	\Database::getInstance()->prepare("UPDATE ".$objDC->table." %s WHERE id=?")->set( array($strField => json_encode( array_filter($arrData) )) )->execute($objDC->id);
 		}
 	}
 	
@@ -98,6 +97,12 @@ class TableContent extends \Backend
 			return 'No image selected';
 		}
 		
+		// load the data container
+		if(!$GLOBALS['loadDataContainer'][$objDC->table])
+		{
+			\Controller::loadDataContainer($objDC->table);
+		}
+		
 		$arrSize = $GLOBALS['PCT_IMAGE_CROP']['defaultCanvasSize'] ?: array(600);
 		
 		if(count($arrSize) < 2)
@@ -107,6 +112,7 @@ class TableContent extends \Backend
 		
 		$strField = $objDC->field;
 		$strTarget = 'singleSRC';
+		$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
 		
 		$objFileModel = \FilesModel::findByPk($objDC->activeRecord->{$strTarget});
 		$objFile = new \File($objFileModel->path);
@@ -122,6 +128,8 @@ class TableContent extends \Backend
 		$objTemplate->mime = $objFile->__get('mime');
 		$objTemplate->rounded_data = json_encode($objData);
 		$objTemplate->data = $objDC->activeRecord->{$strField} ?: '';
+		$objTemplate->fieldDef = $arrFieldDef;
+		$objTemplate->lang = $GLOBALS['TL_LANG']['PCT_IMAGE_CROP'];
 		
 		return  \Controller::replaceInsertTags($objTemplate->parse());
 	}
