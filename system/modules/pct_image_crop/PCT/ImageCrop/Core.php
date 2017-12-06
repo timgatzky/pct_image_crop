@@ -66,27 +66,12 @@ class Core extends \Controller
 		 	return $strBuffer;
 	 	}
 	 	
-	 	// remember original upload path
-	 	$strUploadPath = \Config::get('uploadPath');
-	 	$arrAssetsPath = explode('/',dirname($objData->src));
-	 	$strAssetsPath = $arrAssetsPath[0];
-	 	if(empty($strAssetsPath))
-	 	{
-		 	$strAssetsPath = 'assets';
-	 	}
-	 	
-	 	//-- trick contao and set the upload path to the cached assets folder
-	 	\Config::set('uploadPath','assets');
-	 	// add the file to file database
+	 	// add the file to file database, just in case it is not yet
 	 	$objFile = \Dbafs::addResource($objData->src);
 	 	// update the element source to the file
 	 	$objElement->{$strSourceField} = $objFile->uuid;
 	 	// regenerate the element with the new data
 	 	$strBuffer = $objElement->generate();
-	 	
-	 	// reset the upload path to its original path
-	 	\Config::set('uploadPath',$strUploadPath);
-	 	//--
 	 		 	
 	 	return $strBuffer;
  	}

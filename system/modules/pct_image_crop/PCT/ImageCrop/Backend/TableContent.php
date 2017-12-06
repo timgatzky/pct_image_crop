@@ -78,10 +78,28 @@ class TableContent extends \Backend
 			 	 	$objFile = new \File($strImage);
 				 	$objFile->write( base64_decode($arrData_base64[1]) );
 				 	$objFile->close();
+				 	
+				 	// move file to cropper directory
+				 	$strUploadPath = \Config::get('uploadPath');
+				 	$strNewPath = $strUploadPath.'/'.$GLOBALS['PCT_IMAGE_CROP']['filesPath'].'/'.$objFile->path;
+				 	
+				 	$arrAssetsPath = explode('/',dirname($objFile->path));
+				 	$strAssetsPath = $arrAssetsPath[0];
+				 	if(empty($strAssetsPath))
+				 	{
+					 	$strAssetsPath = 'assets';
+				 	}
+				 	\Config::set('uploadPath',$strAssetsPath);
+				 	
+				 	$objFile->copyTo( $strUploadPath.'/'.$GLOBALS['PCT_IMAGE_CROP']['filesPath'].'/'.$objFile->path);
+				 	\Config::set('uploadPath',$strUploadPath);
+				 	
+				 	// add new image path to the set data
+			 	 	$arrData['src'] = $strNewPath;
 			 	}
 			 	
-			 	// add new image path to the set data
-			 	$arrData['src'] = $strImage;
+			 	// add assets image path
+			 	$arrData['tmp_src'] = $strImage;
 		 	}
 			
 		 	\Database::getInstance()->prepare("UPDATE ".$objDC->table." %s WHERE id=?")->set( array($strField => json_encode( array_filter($arrData) )) )->execute($objDC->id);
