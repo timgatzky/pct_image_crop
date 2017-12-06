@@ -76,7 +76,7 @@ class Core extends \Controller
 	 	}
 	 	
 	 	//-- trick contao and set the upload path to the cached assets folder
-	 	\Config::set('uploadPath','assets');
+	 	#\Config::set('uploadPath','assets');
 	 	// add the file to file database
 	 	$objFile = \Dbafs::addResource($objData->src);
 	 	// update the element source to the file
@@ -85,7 +85,7 @@ class Core extends \Controller
 	 	$strBuffer = $objElement->generate();
 	 	
 	 	// reset the upload path to its original path
-	 	\Config::set('uploadPath',$strUploadPath);
+	 	#\Config::set('uploadPath',$strUploadPath);
 	 	//--
 	 		 	
 	 	return $strBuffer;
