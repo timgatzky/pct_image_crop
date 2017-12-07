@@ -5,7 +5,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/js/cropperjs/croppe
 $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/css/styles.css';
 ?>
 
-<div id="pct_image_crop_canvas_<?php echo $this->id; ?>" class="pct_image_crop_widget">
+<div id="pct_image_crop_canvas_<?php echo $this->id; ?>" class="pct_image_crop_widget widget <?php if(version_compare(VERSION,'4','>=')): ?>contao-ht35<?php endif; ?>">
 	<div class="canvas"><?php echo $this->image; ?></div>
 	
 	<div class="information">
