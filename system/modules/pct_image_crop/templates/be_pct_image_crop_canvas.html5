@@ -48,6 +48,8 @@ window.addEvent('domready', function()
 		crop: function (e) 
     	{
 	      	var data = JSON.stringify( cropper.getData() );
+			// write to console
+			console.log('Cropper: '+data);
 			// update readable
 			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> .information .text').innerHTML = data;
 			// update input
