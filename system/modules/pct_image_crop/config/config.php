@@ -14,7 +14,7 @@
 /**
  * Config
  */
-$GLOBALS['PCT_IMAGE_CROP']['supportedCeTypes'] = array('image');
+$GLOBALS['PCT_IMAGE_CROP']['supportedCeTypes'] = array('text','image');
 
 if(!is_array($GLOBALS['PCT_IMAGE_CROP']['cropFormats']))
 {

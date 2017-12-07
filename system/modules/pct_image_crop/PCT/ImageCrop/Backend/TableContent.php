@@ -59,8 +59,20 @@ class TableContent extends \Backend
 	 	unset($GLOBALS['TL_DCA'][$objDC->table]['fields'][$strSizeField]['eval']['rgxp']);
 	 	
 	 	// load the image crop palette
-	 	$GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type] = str_replace($strSourceField, 'singleSRC;{pct_image_crop_legend},'.$strField.';', $GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type]);
-	
+	 	$GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type] = str_replace($strSourceField, $strSourceField.';{pct_image_crop_legend},'.$strField.';', $GLOBALS['TL_DCA'][$objDC->table]['palettes'][$objDC->activeRecord->type]);
+	 	
+	 	// load the image crop field in subpalettes
+	 	if(is_array($GLOBALS['TL_DCA'][$objDC->table]['subpalettes']) && count($GLOBALS['TL_DCA'][$objDC->table]['subpalettes']) > 0)
+	 	{
+		 	foreach($GLOBALS['TL_DCA'][$objDC->table]['subpalettes'] as $k => $v)
+		 	{
+			 	if(strlen(strpos($v, $strSourceField)) > 0)
+			 	{
+				 	$GLOBALS['TL_DCA'][$objDC->table]['subpalettes'][$k] = str_replace($strSourceField, $strSourceField.';'.$strField,$GLOBALS['TL_DCA'][$objDC->table]['subpalettes'][$k]);
+			 	}
+		 	}
+	 	}
+	 		
 	 	// save value
 	 	if(\Input::post($strField) != '' && \Input::post($strfield_base64) != '')
 	 	{
