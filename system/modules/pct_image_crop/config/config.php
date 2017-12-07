@@ -30,6 +30,15 @@ if(empty($GLOBALS['PCT_IMAGE_CROP']['filesPath']))
 // insert a imace crop selections
 array_insert( $GLOBALS['TL_CROP'],0, array('pct_image_crop' => $GLOBALS['PCT_IMAGE_CROP']['cropFormats']));
 
+// make sure new folder is public
+if(version_compare(VERSION, '4','>=') && !file_exists(\Config::get('uploadPath').'/'.$GLOBALS['PCT_IMAGE_CROP']['filesPath'].'/.public'))
+{
+	$_public = new \File(\Config::get('uploadPath').'/'.$GLOBALS['PCT_IMAGE_CROP']['filesPath'].'/.public');
+	$_public->write('');
+	$_public->close();
+	unset($_public);
+}
+
 /**
  * Hooks
  */
