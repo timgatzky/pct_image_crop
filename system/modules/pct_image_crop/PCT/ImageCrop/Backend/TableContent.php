@@ -67,6 +67,22 @@ class TableContent extends \Backend
 		 	$arrData = json_decode(\Input::post($strField),true);
 		 	$arrData_base64 = explode(',', \Input::post($strfield_base64));
 		 	
+		 	// round the data
+		 	if(is_array($arrData))
+		 	{
+			 	$tmp = array();
+			 	foreach($arrData as $k => $v)
+			 	{
+				 	if(is_numeric($v))
+				 	{
+				 		$v = round($v,2);
+				 	}
+				 	$tmp[$k] = $v;
+			 	}
+			 	$arrData = $tmp;
+			 	unset($tmp);
+			 }
+		 	
 		 	$objFile = \FilesModel::findByPk( $objDC->activeRecord->{$strSourceField} );
 		 	if($objFile !== null)
 		 	{
@@ -82,7 +98,7 @@ class TableContent extends \Backend
 				 	// move file to cropper directory
 				 	$strUploadPath = \Config::get('uploadPath');
 				 	$strNewPath = $strUploadPath.'/'.$GLOBALS['PCT_IMAGE_CROP']['filesPath'].'/'.$objFile->path;
-				 	
+					
 				 	$arrAssetsPath = explode('/',dirname($objFile->path));
 				 	$strAssetsPath = $arrAssetsPath[0];
 				 	if(empty($strAssetsPath))
