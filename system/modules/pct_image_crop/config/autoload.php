@@ -18,6 +18,7 @@ ClassLoader::addClasses(array
 (
 	'PCT\ImageCrop\Core' 					=> 'system/modules/pct_image_crop/PCT/ImageCrop/Core.php',
 	'PCT\ImageCrop\Backend\TableContent' 	=> 'system/modules/pct_image_crop/PCT/ImageCrop/Backend/TableContent.php',
+	'PCT\ImageCrop\Backend\TableCustomElementAttribute' 	=> 'system/modules/pct_image_crop/PCT/ImageCrop/Backend/TableCustomElementAttribute.php',
 	'PCT\ImageCrop\Backend\Helper' 			=> 'system/modules/pct_image_crop/PCT/ImageCrop/Backend/Helper.php',
 ));
 

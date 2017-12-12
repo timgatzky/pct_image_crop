@@ -43,4 +43,6 @@ if(version_compare(VERSION, '4','>=') && !file_exists(\Config::get('uploadPath')
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['getContentElement'][] 		= array('PCT\ImageCrop\Core','getContentElementCallback');
-$GLOBALS['TL_HOOKS']['parseWidget'][] 		= array('PCT\ImageCrop\Backend\Helper','parseWidgetCallback');
+$GLOBALS['TL_HOOKS']['parseWidget'][] 				= array('PCT\ImageCrop\Backend\Helper','parseWidgetCallback');
+$GLOBALS['CUSTOMELEMENTS_HOOKS']['parseWidget'][] 	= array('PCT\ImageCrop\Backend\Helper','CE_parseWidgetCallback');
+$GLOBALS['CUSTOMELEMENTS_HOOKS']['prepareRendering'][] = array('PCT\ImageCrop\Core','prepareRenderingCallback');
