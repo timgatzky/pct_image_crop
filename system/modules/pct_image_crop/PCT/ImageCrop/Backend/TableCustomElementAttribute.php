@@ -36,9 +36,9 @@ class TableCustomElementAttribute extends \Backend
 	 	if($objDC->activeRecord->type == 'image')
 	 	{
 		 	$arrOptions = deserialize($objDC->activeRecord->options);
-		 	if(!in_array('cropperdata', $arrOptions) && in_array('size', $arrOptions))
+		 	if(in_array('cropperdata', $arrOptions) && !in_array('size', $arrOptions))
 		 	{
-			 	$arrOptions[] = 'cropperdata';
+			 	$arrOptions[] = 'size';
 			 	\Database::getInstance()->prepare("UPDATE ".$objDC->table." %s WHERE id=?")->set( array('options' => $arrOptions) )->execute($objDC->id);
 		 	}
 	 	}

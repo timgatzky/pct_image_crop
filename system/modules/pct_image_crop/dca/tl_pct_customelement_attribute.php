@@ -11,7 +11,15 @@
  * @link		http://contao.org
  */
 
+\System::loadLanguageFile('tl_pct_customelement_attribute',$GLOBALS['TL_LANGUAGE'],true);
+
 /**
  * Config
  */
 $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['config']['onsubmit_callback'][] = array('PCT\ImageCrop\Backend\TableCustomElementAttribute', 'onSubmitCallback');
+
+/**
+ * Add Cropper option for image attributes
+ */
+$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options']['image']['options'][] = 'cropperdata';
+$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options']['image']['reference']['cropperdata'] = $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['image']['cropperdata'];
