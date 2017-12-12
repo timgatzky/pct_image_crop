@@ -77,6 +77,37 @@ class Core extends \Controller
  	}
  	
  	
+ 	/**
+ 	 * Update the image source by the cropped image and regenerate the output for the image attribute
+ 	 * @param string
+ 	 * @param mixed
+ 	 * @param object
+ 	 * @param object
+ 	 *
+ 	 * called from prepareRendering Hook
+ 	 */
+ 	public function prepareRenderingCallback($strField,$varValue,$objTemplate,$objAttribute)
+ 	{
+	 	if(!in_array($objAttribute->get('type'), $GLOBALS['PCT_IMAGE_CROP']['supportedCeTypes']))
+	 	{
+		 	return $strBuffer;
+	 	}
+	 	
+	 	$arrOptionValues = $objAttribute->get('arrOptionValues');
+	 	$objData = json_decode($arrOptionValues['cropperdata']);
+	 	
+	 	// add the file to file database, just in case it is not yet
+	 	$objFile = \Dbafs::addResource($objData->src);
+	 
+	 	if($objFile)
+	 	{
+		 	$varValue = $objFile->uuid;
+	 	}
+	 	
+	 	return $objAttribute->renderCallback($strField,$varValue,$objTemplate,$objAttribute);
+	 }
+ 	
+ 	
 	/**
 	 * Render the image crop field
 	 * @param object
@@ -85,7 +116,19 @@ class Core extends \Controller
 	 */	
 	public function renderImageCropCanvas($objDC)
 	{
-		if(!$objDC->activeRecord->singleSRC)
+		$strField = $objDC->field;
+		$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
+		$strSourceField = $arrFieldDef['eval']['cropper']['sourceField'];
+	 	$strSizeField = $arrFieldDef['eval']['cropper']['sizeField'];
+	 	
+	 	// fields directly from object
+	 	if(is_array($objDC->cropper))
+	 	{
+		 	$strSourceField = $objDC->cropper['sourceField'];
+		 	$strSizeField = $objDC->cropper['sizeField'];
+	 	}
+	 	
+	 	if(!$objDC->activeRecord->{$strSourceField})
 		{
 			return 'No image selected';
 		}
@@ -96,11 +139,6 @@ class Core extends \Controller
 			\Controller::loadDataContainer($objDC->table);
 		}
 		
-		$strField = $objDC->field;
-		$arrFieldDef = $GLOBALS['TL_DCA'][$objDC->table]['fields'][$strField];
-		$strSourceField = $arrFieldDef['eval']['cropper']['sourceField'];
-	 	$strSizeField = $arrFieldDef['eval']['cropper']['sizeField'];
-
 		$arrSize = deserialize($objDC->activeRecord->{$strSizeField});
 		if(!is_array($arrSize))
 		{
@@ -115,6 +153,13 @@ class Core extends \Controller
 			$numRatio = $_ratio[0] / $_ratio[1];
 		}
 		
+		// individual selector
+	 	$strSelector = 'pct_image_crop_canvas_'.$objDC->id;
+	 	if(strlen($objDC->cropper['selector']))
+	 	{
+		 	$strSelector = $objDC->cropper['selector'];
+	 	}
+	 	
 		$objFileModel = \FilesModel::findByPk($objDC->activeRecord->{$strSourceField});
 		$objFile = new \File($objFileModel->path);
 		$strImageSrc = \Image::get($objFileModel->path,null,null);
@@ -123,13 +168,13 @@ class Core extends \Controller
 		$objTemplate = new \BackendTemplate('be_pct_image_crop_canvas');
 		$objTemplate->setData($objDC->activeRecord->row());
 		$objTemplate->objDataContainer = $objDC;
+		$objTemplate->selector = $strSelector;
 		$objTemplate->activeRecord = $objDC->activeRecord;
 		$objTemplate->file = $objFile;
 		$objTemplate->name = $strField;
 		$objTemplate->name_base64 = $strField.'_base64';
 		$objTemplate->image = $strImage;
 		$objTemplate->mime = $objFile->__get('mime');
-		$objTemplate->rounded_data = json_encode($objData);
 		$objTemplate->data = $objDC->activeRecord->{$strField} ?: '';
 		$objTemplate->fieldDef = $arrFieldDef;
 		$objTemplate->lang = $GLOBALS['TL_LANG']['PCT_IMAGE_CROP'];

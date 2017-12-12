@@ -5,7 +5,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/js/cropperjs/croppe
 $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/css/styles.css';
 ?>
 
-<div id="pct_image_crop_canvas_<?php echo $this->id; ?>" class="pct_image_crop_widget widget <?php if(version_compare(VERSION,'4','>=')): ?>contao-ht35<?php endif; ?>">
+<div id="<?= $this->selector; ?>" class="pct_image_crop_widget widget <?php if(version_compare(VERSION,'4','>=')): ?>contao-ht35<?php endif; ?>">
 	<div class="canvas"><?php echo $this->image; ?></div>
 	
 	<div class="information">
@@ -20,7 +20,7 @@ $GLOBALS['TL_CSS'][] = 'system/modules/pct_image_crop/assets/css/styles.css';
 
 window.addEvent('domready', function()
 {
-	var image = document.querySelector('#pct_image_crop_canvas_<?php echo $this->id; ?> img');
+	var image = document.querySelector('#<?= $this->selector; ?> img');
 	
 	// calculate max-height for canvas
 	var image_ratio = image.height / image.width;
@@ -30,7 +30,7 @@ window.addEvent('domready', function()
 	}
 	var maxHeight = (image.width * image_ratio) + 50;
 	// set max-height
-	document.querySelector('#pct_image_crop_canvas_<?php echo $this->id; ?> .canvas').style = 'max-height:'+maxHeight+'px;';
+	document.querySelector('#<?= $this->selector; ?> .canvas').style = 'max-height:'+maxHeight+'px;';
 	
 	var options = 
 	{
@@ -51,12 +51,12 @@ window.addEvent('domready', function()
 			// write to console
 			console.log('Cropper: '+data);
 			// update readable
-			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> .information .text').innerHTML = data;
+			document.querySelector('#<?= $this->selector; ?> .information .text').innerHTML = data;
 			// update input
-			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> input[name="<?= $this->name; ?>"]').value = data;
+			document.querySelector('#<?= $this->selector; ?> input[name="<?= $this->name; ?>"]').value = data;
 			// get base64 data
 			var cropped_image_data = cropper.getCroppedCanvas().toDataURL('<?= $this->mime; ?>');
-			document.querySelector('#pct_image_crop_canvas_<?= $this->id; ?> input[name="<?= $this->name_base64; ?>"]').value = cropped_image_data;
+			document.querySelector('#<?= $this->selector; ?> input[name="<?= $this->name_base64; ?>"]').value = cropped_image_data;
     	}
 	};
 	
