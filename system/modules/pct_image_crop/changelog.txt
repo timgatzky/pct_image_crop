@@ -1,5 +1,6 @@
 ### 1.2.1
 Fixed: Skip images without the cropper option (#7) 
+Update: Check if addImage option is set in text content elements before regenerating the element
 
 ### 1.2.0
 Update: Image crop [cropperdata] is now a visible option in image attributes
