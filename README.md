@@ -9,7 +9,7 @@ Installation
 ------------
 - Clear the internal cache
 - Copy the module folder to /system/modules, update database 
-- A public folder will be created in the files older (/files/pct_image_crop)
+- A public folder will be created in the files folder (/files/pct_image_crop)
 
 Installation Contao 4
 ------------
