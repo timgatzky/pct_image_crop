@@ -48,6 +48,11 @@ class Core extends \Controller
 		 	$intId = $objElement->cteAlias;
 	 	}
 	 	
+	 	if($objElement->type == 'text' && !$objElement->addImage)
+	 	{
+		 	return $strBuffer;
+	 	}
+	 	
 	 	$strField = 'pct_image_crop_data';
 	 	$arrFieldDef = $GLOBALS['TL_DCA']['tl_content']['fields'][$strField];
 		$strSourceField = $arrFieldDef['eval']['cropper']['sourceField'];
