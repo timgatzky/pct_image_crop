@@ -94,7 +94,17 @@ class Core extends \Controller
 	 	}
 	 	
 	 	$arrOptionValues = $objAttribute->get('arrOptionValues');
+	 	if(empty($arrOptionValues['cropperdata']))
+	 	{
+		 	return $strBuffer;
+	 	}
+	 	
 	 	$objData = json_decode($arrOptionValues['cropperdata']);
+	 	
+	 	if(empty($objData->src))
+	 	{
+		 	return $strBuffer;
+	 	}
 	 	
 	 	// add the file to file database, just in case it is not yet
 	 	$objFile = \Dbafs::addResource($objData->src);
