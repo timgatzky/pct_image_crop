@@ -106,7 +106,7 @@ class Core extends \Controller
 	 	
 	 	$objData = json_decode($arrOptionValues['cropperdata']);
 	 	
-	 	if(empty($objData->src))
+	 	if(empty($objData->src) || !file_exists(TL_ROOT.'/'.$objData->src))
 	 	{
 		 	return $strBuffer;
 	 	}
