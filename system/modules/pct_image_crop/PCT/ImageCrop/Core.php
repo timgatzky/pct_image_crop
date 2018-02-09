@@ -60,10 +60,10 @@ class Core extends \Controller
 	 	
 	 	$arrSize = deserialize($objRow->{$strSizeField});
 	 	$objData = json_decode($objRow->{$strField});
-	 
+	 	
 	 	if(!in_array($arrSize[2], $GLOBALS['PCT_IMAGE_CROP']['cropFormats']))
 	 	{
-		 	return;
+		 	return $strBuffer;
 	 	}
 	 	
 	 	if(!file_exists(TL_ROOT.'/'.$objData->src))
