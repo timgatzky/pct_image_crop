@@ -1,4 +1,4 @@
-### 1.2.3
+### 1.2.2
 Fixed: Backend wildcards did not show regular image previews anymore
 
 ### 1.2.1
